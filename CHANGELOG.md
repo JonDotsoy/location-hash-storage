@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/JonDotsoy/location-hash-storage/compare/location-hash-storage-v0.2.2...location-hash-storage-v0.2.3) (2025-11-18)
+
+
+### Miscellaneous Chores
+
+* release 0.2.3 ([2c09fcc](https://github.com/JonDotsoy/location-hash-storage/commit/2c09fcc09b520d8793be0b9d088bd71921d5727c))
+
 ## [0.2.2](https://github.com/JonDotsoy/location-hash-storage/compare/location-hash-storage-v0.2.1...location-hash-storage-v0.2.2) (2025-11-18)
 
 
