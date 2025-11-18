@@ -41,5 +41,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jondotsoy/location-hash-storage.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
