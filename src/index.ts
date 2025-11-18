@@ -154,11 +154,28 @@ export class LocationHashStorage {
     return locationHash.get().get(key) ?? null;
   };
   static setItem = (key: string, value: string) => {
-    locationHash.get().set(key, value);
-    browserWindow.location.hash = locationHash.get().toString();
+    const params = locationHash.get();
+    params.set(key, value);
+    browserWindow.location.hash = params.toString();
+    locationHash.set(params);
   };
   static removeItem = (key: string) => {
-    locationHash.get().delete(key);
-    browserWindow.location.hash = locationHash.get().toString();
+    const params = locationHash.get();
+    params.delete(key);
+    browserWindow.location.hash = params.toString();
+    locationHash.set(params);
+  };
+  static subscribeItem = (key: string, cb: (value: string | null) => void) => {
+    let previousValue: string | null = null;
+
+    const unsub = locationHash.subscribe(() => {
+      const currentValue = LocationHashStorage.getItem(key);
+      if (currentValue !== previousValue) {
+        previousValue = currentValue;
+        cb(currentValue);
+      }
+    });
+
+    return unsub;
   };
 }

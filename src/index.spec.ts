@@ -1,5 +1,11 @@
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect, mock } from "bun:test";
 import { LocationHashStorage } from "./index.js";
+
+const nextCicle = () => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 2);
+  });
+};
 
 describe("LocationHashStorage", () => {
   test("should store and retrieve an item", () => {
@@ -12,5 +18,37 @@ describe("LocationHashStorage", () => {
     LocationHashStorage.setItem("test", "test");
     const value = LocationHashStorage.removeItem("test");
     expect(value).toBeUndefined();
+  });
+
+  test("should subscribe to item changes and call callback on updates", async () => {
+    LocationHashStorage.setItem("test", ""); // Reset value
+
+    const fn = mock();
+
+    const unsub = LocationHashStorage.subscribeItem(
+      "test",
+      (value: string | null) => {
+        fn(value);
+      },
+    );
+
+    await nextCicle();
+
+    expect(unsub).toBeFunction();
+    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledWith("");
+
+    LocationHashStorage.setItem("test", "test");
+    await nextCicle();
+    expect(fn).toBeCalledTimes(2);
+    expect(fn).toBeCalledWith("test");
+    LocationHashStorage.setItem("test", "test");
+    await nextCicle();
+    expect(fn).toBeCalledTimes(2);
+
+    LocationHashStorage.setItem("test", "test2");
+    await nextCicle();
+    expect(fn).toBeCalledTimes(3);
+    expect(fn).toBeCalledWith("test2");
   });
 });
