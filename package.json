@@ -1,0 +1,45 @@
+{
+  "name": "@jondotsoy/location-hash-storage",
+  "version": "0.1.0",
+  "main": "./lib/esm/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/types/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "default": "./lib/esm/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./lib/types/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "prettier --check .",
+    "fmt": "prettier --write .",
+    "playwright": "bunx playwright test",
+    "build": "rm -rf lib && tsc -p tsconfig.esm.json && tsc -p tsconfig.types.json",
+    "web:demo": "bun build src/index.ts --target browser --outfile demo/index.js && bunx serve demo"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@types/bun": "latest",
+    "@types/node": "24.10.1",
+    "prettier": "3.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "files": [
+    "lib/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jondotsoy/location-hash-storage.git"
+  }
+}
