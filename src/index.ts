@@ -178,4 +178,17 @@ export class LocationHashStorage {
 
     return unsub;
   };
+  static listenItem = (key: string, cb: (value: string | null) => void) => {
+    let previousValue: string | null = LocationHashStorage.getItem(key);
+
+    const unsub = locationHash.listen(() => {
+      const currentValue = LocationHashStorage.getItem(key);
+      if (currentValue !== previousValue) {
+        previousValue = currentValue;
+        cb(currentValue);
+      }
+    });
+
+    return unsub;
+  };
 }

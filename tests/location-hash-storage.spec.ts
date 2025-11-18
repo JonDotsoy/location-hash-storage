@@ -91,3 +91,45 @@ test("should subscribe to item changes and call callback on updates", async ({
 
   expect(result).toEqual(["", "test", "test2"]);
 });
+
+test("should listen to item changes without initial call", async ({ page }) => {
+  await page.goto("/#test=initial");
+
+  const result = await page.evaluate(() => {
+    return new Promise<string[]>((resolve) => {
+      const values: string[] = [];
+
+      // @ts-ignore
+      const unsub = (window as any).LocationHashStorage.listenItem(
+        "test",
+        (value: string | null) => {
+          values.push(value ?? "null");
+        },
+      );
+
+      // Should NOT be called immediately (no initial value)
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "first");
+      }, 10);
+
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "first");
+      }, 20);
+
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "second");
+      }, 30);
+
+      setTimeout(() => {
+        unsub();
+        resolve(values);
+      }, 50);
+    });
+  });
+
+  // Should only have the changed values, not the initial value
+  expect(result).toEqual(["first", "second"]);
+});

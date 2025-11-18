@@ -51,4 +51,38 @@ describe("LocationHashStorage", () => {
     expect(fn).toBeCalledTimes(3);
     expect(fn).toBeCalledWith("test2");
   });
+
+  test("should listen to item changes without initial call", async () => {
+    LocationHashStorage.setItem("test", "initial"); // Set initial value
+
+    const fn = mock();
+
+    const unsub = LocationHashStorage.listenItem(
+      "test",
+      (value: string | null) => {
+        fn(value);
+      },
+    );
+
+    await nextCicle();
+
+    expect(unsub).toBeFunction();
+    // Should NOT be called initially
+    expect(fn).toBeCalledTimes(0);
+
+    LocationHashStorage.setItem("test", "first");
+    await nextCicle();
+    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledWith("first");
+
+    LocationHashStorage.setItem("test", "first");
+    await nextCicle();
+    // Should not be called again for the same value
+    expect(fn).toBeCalledTimes(1);
+
+    LocationHashStorage.setItem("test", "second");
+    await nextCicle();
+    expect(fn).toBeCalledTimes(2);
+    expect(fn).toBeCalledWith("second");
+  });
 });
