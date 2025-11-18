@@ -52,7 +52,7 @@ LocationHashStorage.setItem("lang", "es");
 Subscribe to changes for specific keys:
 
 ```typescript
-// Listen to theme changes
+// Subscribe to theme changes (callback called immediately + on changes)
 const unsubscribe = LocationHashStorage.subscribeItem("theme", (value) => {
   console.log("Theme is now:", value);
   document.body.className = value || "light";
@@ -60,6 +60,22 @@ const unsubscribe = LocationHashStorage.subscribeItem("theme", (value) => {
 
 // The callback is called immediately with the current value
 // and whenever the hash changes (via setItem, removeItem, or browser navigation)
+
+// Stop listening when no longer needed
+unsubscribe();
+```
+
+Or listen only to future changes:
+
+```typescript
+// Listen to theme changes (callback only called on changes, not immediately)
+const unsubscribe = LocationHashStorage.listenItem("theme", (value) => {
+  console.log("Theme changed to:", value);
+  document.body.className = value || "light";
+});
+
+// The callback is only called when the hash changes
+// (via setItem, removeItem, or browser navigation)
 
 // Stop listening when no longer needed
 unsubscribe();
@@ -107,6 +123,35 @@ Subscribes to changes for a specific key in the URL hash. The callback is called
 const unsubscribe = LocationHashStorage.subscribeItem("theme", (value) => {
   console.log("Theme changed to:", value);
 });
+
+// Later, stop listening
+unsubscribe();
+```
+
+### `LocationHashStorage.listenItem(key: string, callback: (value: string | null) => void): () => void`
+
+Listens to changes for a specific key in the URL hash. Unlike `subscribeItem`, the callback is **not** called immediately - it only triggers when the value actually changes.
+
+**Parameters:**
+
+- `key`: The key to watch for changes
+- `callback`: Function called when the value changes
+
+**Returns:** An unsubscribe function to stop listening to changes
+
+**Example:**
+
+```typescript
+// Set initial value
+LocationHashStorage.setItem("count", "0");
+
+// Listen for changes (callback won't be called immediately)
+const unsubscribe = LocationHashStorage.listenItem("count", (value) => {
+  console.log("Count changed to:", value);
+});
+
+// This will trigger the callback
+LocationHashStorage.setItem("count", "1"); // Logs: "Count changed to: 1"
 
 // Later, stop listening
 unsubscribe();
