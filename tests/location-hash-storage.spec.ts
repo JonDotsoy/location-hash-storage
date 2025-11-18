@@ -48,3 +48,46 @@ test("should handle multiple items and remove specific item from URL hash", asyn
   expect(page.url()).not.toContain("boo=biz");
   expect(page.url()).toContain("bliz=fazzy");
 });
+
+test("should subscribe to item changes and call callback on updates", async ({
+  page,
+}) => {
+  await page.goto("/#test=");
+
+  const result = await page.evaluate(() => {
+    return new Promise<string[]>((resolve) => {
+      const values: string[] = [];
+
+      // @ts-ignore
+      const unsub = (window as any).LocationHashStorage.subscribeItem(
+        "test",
+        (value: string | null) => {
+          values.push(value ?? "null");
+        },
+      );
+
+      // Initial value should be called immediately
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "test");
+      }, 10);
+
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "test");
+      }, 20);
+
+      setTimeout(() => {
+        // @ts-ignore
+        (window as any).LocationHashStorage.setItem("test", "test2");
+      }, 30);
+
+      setTimeout(() => {
+        unsub();
+        resolve(values);
+      }, 50);
+    });
+  });
+
+  expect(result).toEqual(["", "test", "test2"]);
+});
