@@ -72,7 +72,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "bun web:demo",
+    command: "npx -y esbuild src/index.ts --bundle --format=esm --outfile=demo/index.js --target=es2020 && npx -y http-server demo -p 3000",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
