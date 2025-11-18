@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/JonDotsoy/location-hash-storage/compare/location-hash-storage-v0.2.7...location-hash-storage-v0.3.0) (2025-11-18)
+
+
+### Features
+
+* **storage:** add subscription support for item changes ([9e11c8c](https://github.com/JonDotsoy/location-hash-storage/commit/9e11c8c6e5977145ed29ed4bb8b4822b6239a1e1))
+
 ## [0.2.7](https://github.com/JonDotsoy/location-hash-storage/compare/location-hash-storage-v0.2.4...location-hash-storage-v0.2.7) (2025-11-18)
 
 
