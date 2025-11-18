@@ -25,6 +25,9 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
     runs-on: ubuntu-latest
+    environment:
+      name: NPM Registry
+      url: https://www.npmjs.com/package/${{ step.package.outputs.name }}/v/${{ step.package.outputs.version }}
     steps:
       - uses: actions/checkout@v5
 
@@ -46,7 +49,12 @@ jobs:
       - name: Build
         run: bun run build
 
+      - id: package
+        run: |
+          jq -r '"::set-output version="+.version' package.json
+          jq -r '"::set-output name="+.name' package.json
+
       - name: Publish to npm
-        run: npm publish --access public
+        run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
