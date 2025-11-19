@@ -47,6 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - id: info_package
+        run: |
+          jq -r '"version="+.version' package.json >> "$GITHUB_OUTPUT"
+          jq -r '"name="+.name' package.json >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-node@v6
         with:
           node-version: "20"
@@ -64,11 +69,6 @@ jobs:
 
       - name: Build
         run: bun run build
-
-      - id: info_package
-        run: |
-          jq -r '"version="+.version' package.json >> "$GITHUB_OUTPUT"
-          jq -r '"name="+.name' package.json >> "$GITHUB_OUTPUT"
 
       - name: Publish to npm
         run: npm publish --access public --provenance
