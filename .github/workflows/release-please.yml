@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: NPM Registry
-      url: https://www.npmjs.com/package/${{ steps.package.outputs.name }}/v/${{ steps.package.outputs.version }}
+      url: https://www.npmjs.com/package/${{ steps.info_package.outputs.name }}/v/${{ steps.info_package.outputs.version }}
     permissions:
       contents: read
       id-token: write
@@ -64,12 +64,23 @@ jobs:
       - name: Build
         run: bun run build
 
-      - id: package
+      - id: info_package
         run: |
-          jq -r '"::set-output version="+.version' package.json
-          jq -r '"::set-output name="+.name' package.json
+          jq -r '"version="+.version' package.json >> "$GITHUB_OUTPUT"
+          jq -r '"name="+.name' package.json >> "$GITHUB_OUTPUT"
 
       - name: Publish to npm
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create comment on PR
+        uses: actions/github-script@v8
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Published \`${$PACKAGE_NAME}\` v\`${$PACKAGE_VERSION}\` to npm.`
+            })
