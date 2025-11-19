@@ -15,7 +15,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
-      pr_number: ${{ fromJson(steps.release.outputs.pr).number }}
+      pr: ${{ steps.release.outputs.pr }}
     steps:
       - uses: actions/checkout@v5
 
@@ -76,12 +76,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create comment on PR
-        if: needs.release-please.outputs.pr_number
+        if: needs.release-please.outputs.pr
         uses: actions/github-script@v8
         with:
           script: |
             github.rest.issues.createComment({
-              issue_number: ${{ needs.release-please.outputs.pr_number }},
+              issue_number: ${{ fromJson(needs.release-please.outputs.pr).number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `Published [\`${{ steps.info_package.outputs.name }}\` v\`${{ steps.info_package.outputs.version }}\`](https://www.npmjs.com/package/${{ steps.info_package.outputs.name }}/v/${{ steps.info_package.outputs.version }}) to npm.`
