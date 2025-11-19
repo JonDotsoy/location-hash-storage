@@ -82,5 +82,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Published \`${$PACKAGE_NAME}\` v\`${$PACKAGE_VERSION}\` to npm.`
+              body: `Published [\`${{ steps.info_package.outputs.name }}\` v\`${{ steps.info_package.outputs.version }}\`](https://www.npmjs.com/package/${{ steps.info_package.outputs.name }}/v/${{ steps.info_package.outputs.version }}) to npm.`
             })
