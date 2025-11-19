@@ -1,6 +1,6 @@
 # @jondotsoy/location-hash-storage
 
-A lightweight storage solution inspired by the `localStorage` and `sessionStorage` APIs, but using the browser's `window.location.hash` to persist data in the URL.
+A lightweight storage solution that manages application state directly in the URL hash (`window.location.hash`). It provides a familiar API inspired by `localStorage` and `sessionStorage`, allowing you to store, retrieve, and reactively observe key-value pairs that persist in the browser's address bar.
 
 ## Features
 

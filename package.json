@@ -1,6 +1,7 @@
 {
   "name": "@jondotsoy/location-hash-storage",
   "version": "0.3.5",
+  "description": "Manage application state directly in the URL hash with a localStorage-like API. Zero dependencies, reactive updates, and perfect for shareable links and bookmarkable state",
   "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/types/index.d.ts",
@@ -47,8 +48,6 @@
   },
   "keywords": [
     "storage",
-    "localstorage",
-    "sessionstorage",
     "url",
     "hash",
     "location-hash",
