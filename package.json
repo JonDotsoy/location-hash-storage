@@ -44,5 +44,22 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "storage",
+    "localstorage",
+    "sessionstorage",
+    "url",
+    "hash",
+    "location-hash",
+    "state-management",
+    "browser",
+    "reactive",
+    "typescript",
+    "url-state",
+    "shareable-links",
+    "browser-storage",
+    "zero-dependencies",
+    "ssr-safe"
+  ]
 }
