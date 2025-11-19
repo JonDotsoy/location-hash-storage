@@ -1,3 +1,15 @@
 {
-  ".": "0.2.7"
+  ".": "0.2.7",
+  "includedCommits": [
+    {
+      "sha": "3fdec81e0f68f0fdffb16d5bb7a13ce3c6389499",
+      "type": "fix",
+      "message": "Fix build configuration to exclude spec files and add DOM lib"
+    },
+    {
+      "sha": "ec155c67570c370e5a3cd92704fb9580e4314205",
+      "type": "feat",
+      "message": "Add LocationHashStorage.listenItem method with tests and documentation"
+    }
+  ]
 }
